@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesquisa por CEP</title>
+  </head>
+  <body>
+    <div class="caixacep">
+      <h1>Pesquisa por CEP</h1>
+      <br /><br />
+      <link rel="stylesheet" href="global.css" />
+      <label for="cep">CEP:</label>
+      <input
+        type="text"
+        name="cep"
+        class="cep"
+        placeholder="Informe o CEP para determinar o endereço"
+      />
+      <br /><br />
+      <label>UF: <span id="uf"></span></label><br />
+      <label>Bairro: <span id="bairro"></span></label><br />
+      <label>Localidade: <span id="localidade"></span></label><br />
+      <label>Logradouro: <span id="logradouro"></span></label><br />
+      <label>Complemento: <span id="complemento"></span></label><br />
+      <button type="submit" onclick="pesquisacep()">PESQUISAR</button>
+    </div>
+    <script>
+      function pesquisacep() {
+        const cep = document.querySelector(".cep").value;
+        const uf = document.getElementById("uf");
+        const bairro = document.getElementById("bairro");
+        const localidade = document.getElementById("localidade");
+        const logradouro = document.getElementById("logradouro");
+        const complemento = document.getElementById("complemento");
+
+        if (cep.length !== 8) {
+          alert("O CEP deve ter 8 dígitos.");
+          return;
+        }
+
+        const apicep = `https://viacep.com.br/ws/${cep}/json/`;
+
+        fetch(apicep)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.erro) {
+              alert("CEP não encontrado.");
+              return;
+            }
+            uf.innerHTML = data.uf;
+            bairro.innerHTML = data.bairro;
+            localidade.innerHTML = data.localidade;
+            logradouro.innerHTML = data.logradouro;
+            complemento.innerHTML = data.complemento || "N/A"; // Complemento pode ser vazio
+          })
+          .catch((error) => {
+            alert("Erro ao buscar o CEP. Tente novamente.");
+            console.error("Erro:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
