@@ -37,3 +37,19 @@ input {
 .cep {
     width: 110%;
 }
+
+.btnfetch {
+    color: white;
+    background: linear-gradient(red, green);
+    outline: none;
+    border: none;
+    width: 300px;
+    height: 30px;
+    border-radius: 30px;
+    transition: .3s;
+}
+
+.btnfetch:hover {
+    transform: scale(1.2);
+    background: linear-gradient(green, red);
+}
