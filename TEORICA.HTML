@@ -16,9 +16,14 @@ Breve definição e pequenos trechos de código para exemplificar.
 <!-- 
 1) Assincronismo. 
 
+assíncronismo diz respeito ao fluxo de execução de um programa. Quando uma operação executa completamente antes de passar o controle à seguinte, a execução é síncrona. Esse é o método padrão de execução de código nas linguagens que eu conheço, e imagino que também na maioria das que não conheço.
+
+ assíncrono diz respeito ao fluxo de execução de um programa. Quando uma operação executa completamente antes de passar o controle à seguinte, a execução é síncrona. Esse é o método padrão de execução de código – nas linguagens que eu conheço, e imagino que também na maioria das que não conheço.
+
 
 CODIGO:
 -->
+ $.get('http://example.com', funcaoQueExecutaQuandoRespostaChegar); // o código seguinte executa antes da resposta da requisição acima fazAlgumaCoisa(); // e a declaração do callback function funcaoQueExecutaQuandoRespostaChegar(resposta) { // a resposta não pode ser usada fora daqui, // a menos que você a passe, a partir daqui, // para uma outra função }
 
 <!-- 
 2) AJAX (Asynchronous Javascript And XML)
@@ -64,6 +69,8 @@ Async/Await: desvantagens: Dependencia de promisses,necessário ambiente moderno
 
 6) Hoisting
 
+O Hoisting é o comportamento padrão do JavaScript de mover as declarações para o topo do seu escopo antes da execução do código, não importa se o escopo seja global ou local. Se você já se perguntou o porque é capaz de chamar funções antes mesmo das linhas em que elas estão escritas, aqui está o motivo.
+ o hoisting acontece apenas para declarações e não para inicializações ou atribuições.
 
 CODIGO:
 -->
