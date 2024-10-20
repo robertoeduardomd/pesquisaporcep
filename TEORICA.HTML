@@ -18,8 +18,6 @@ Breve definição e pequenos trechos de código para exemplificar.
 
 assíncronismo diz respeito ao fluxo de execução de um programa. Quando uma operação executa completamente antes de passar o controle à seguinte, a execução é síncrona. Esse é o método padrão de execução de código nas linguagens que eu conheço, e imagino que também na maioria das que não conheço.
 
- assíncrono diz respeito ao fluxo de execução de um programa. Quando uma operação executa completamente antes de passar o controle à seguinte, a execução é síncrona. Esse é o método padrão de execução de código – nas linguagens que eu conheço, e imagino que também na maioria das que não conheço.
-
 
 CODIGO:
 -->
@@ -32,15 +30,54 @@ CODIGO:
 
 CODIGO:
 -->
+function buscarProdutos(termo) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'busca.php?termo=' + termo, true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const resultados = document.getElementById('resultados');
+      resultados.innerHTML = xhr.responseText;
+    } else {
+      console.error('Erro na requisição');
+    }
+  };
+  xhr.send();
+}
 
 <!-- 
-3) promises
+3) Promises 
+
 
  É um objeto que representa o estado de uma operação assíncrona e o seu valor resultante, ele retorna uma função assíncrona e oferece métodos para tratar exceções ou falhas
 
 
 CODIGO:
 -->
+function obterDados(url) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        reject(new Error('Falha ao obter dados'));
+      }
+    };
+    xhr.onerror = () => {
+      reject(new Error('Erro de rede'));
+    };
+    xhr.send();
+  });
+}
+
+obterDados('https://api.example.com/dados')
+  .then(dados => {
+    console.log('Dados recebidos:', dados);
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+  });
 
 <!-- 
 4) fetch API
@@ -49,6 +86,10 @@ CODIGO:
 
 CODIGO:
 -->
+fetch('https://api.example.com/dados')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Erro:', error));
 
 <!-- 
 5) Async / Await
@@ -57,15 +98,29 @@ CODIGO:
 
 CODIGO:
 -->
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+fetchData();
 
 <!-- 
 Quais vantagens/desvantagens de usar cada uma das opções acima?
 
-AJAX (XMLHttpRequest): desvantagens: suas sintaxes são complexas,pouco flexível requer muito código para realizar tarefas comuns; vantagens: ele tem compatibilidade extensa funciona na maioria dos navegadores e até mesmo mais antigos, e um bom controle de monitoramento
+AJAX (XMLHttpRequest): desvantagens: suas sintaxes são complexas,pouco flexível requer muito código para realizar tarefas comuns; 
+vantagens: ele tem compatibilidade extensa funciona na maioria dos navegadores e até mesmo mais antigos, e um bom controle de monitoramento
 
-Fetch API: desvantagens:falhas silenciosas,suporte limitado em prograsso de download e upload,não écompativel com navegadores antigos; vantagens: sintaxe simples e limpa de facil compreensão, compatível com JSON lida facilmente com conversões,melhor integração e suporte com promisses
+Fetch API: desvantagens:falhas silenciosas,suporte limitado em prograsso de download e upload,não écompativel com navegadores antigos; 
+vantagens: sintaxe simples e limpa de facil compreensão, compatível com JSON lida facilmente com conversões,melhor integração e suporte com promisses
 
-Async/Await: desvantagens: Dependencia de promisses,necessário ambiente moderno para ter compatibilidade,tratamentos paralelos e loops limitados deixando ele ineficiente nesse quesito; vantagens: código mais limpo e linear,tratamento de erros unificado e mais intuitivo utilizando o try,catch,melhor fluxo de controle facilita o gerenciamento de operações assincronas
+Async/Await: desvantagens: Dependencia de promisses,necessário ambiente moderno para ter compatibilidade,tratamentos paralelos e loops limitados deixando ele ineficiente nesse quesito; 
+vantagens: código mais limpo e linear,tratamento de erros unificado e mais intuitivo utilizando o try,catch,melhor fluxo de controle facilita o gerenciamento de operações assincronas
 
 6) Hoisting
 
@@ -74,13 +129,22 @@ O Hoisting é o comportamento padrão do JavaScript de mover as declarações pa
 
 CODIGO:
 -->
+console.log(x);
+var x = 10;
+
 
 <!-- 
 7) Arrow Functions (especialmente diferenças com relação as funções normais)
 
+arrow functions são uma sintaxe mais concisa introduzida no ECMAScript 6 (ES6) para criar funções em JavaScript. Elas oferecem uma forma mais elegante de escrever funções, especialmente quando se trata de funções curtas ou de callback.
 
 CODIGO:
 -->
+(parâmetros) => { corpo da função }
+
+const soma = (a, b) => {
+  return a + b;
+};
 
 <!-- 
 8) Desestruturação (Destructuring)
