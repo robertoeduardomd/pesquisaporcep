@@ -1,16 +1,3 @@
-<!-- 
-As atividades abaixo podem ser realizadas em grupo de 1 (um) até 6 (seis) alunos. 
-As respostas da parte 1 e o código da parte 2 deve ser entregue em um repositório no Github.
-
-Integrantes do grupo:
-*Bruno Salles
-*Roberto Eduardo
-*Emanuel Costa
-*Felipe Augusto
-*Paulo César de Figuereido Sousa
-Link para o GitHub: https://github.com/robertoeduardomd/pesquisaporcep
-
--->
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -36,11 +23,25 @@ Link para o GitHub: https://github.com/robertoeduardomd/pesquisaporcep
       <label>Localidade: <span id="localidade"></span></label><br />
       <label>Logradouro: <span id="logradouro"></span></label><br />
       <label>Complemento: <span id="complemento"></span></label><br />
+
+      <!-- Botão com método Fetch -->
       <button class="btnfetch" type="submit" onclick="pesquisacep()">
         PESQUISAR pelo FETCH
       </button>
+      <br />
+      <!-- Botão com método Async/Await -->
+      <button class="btnasync" type="submit" onclick="pesquisacepAsync()">
+        PESQUISAR pelo Async/Await
+      </button>
+      <br />
+      <!-- Botão para buscar com AJAX -->
+      <button class="btnajax" type="submit" onclick="pesquisacepAjax()">
+        PESQUISAR pelo AJAX
+      </button>
     </div>
+
     <script>
+      // Função com Fetch (já existente)
       function pesquisacep() {
         const cep = document.querySelector(".cep").value;
         const uf = document.getElementById("uf");
@@ -73,6 +74,75 @@ Link para o GitHub: https://github.com/robertoeduardomd/pesquisaporcep
             alert("Erro ao buscar o CEP. Tente novamente.");
             console.error("Erro:", error);
           });
+      }
+
+      // Função usando Async/Await
+      async function pesquisacepAsync() {
+        const cep = document.querySelector(".cep").value;
+        const uf = document.getElementById("uf");
+        const bairro = document.getElementById("bairro");
+        const localidade = document.getElementById("localidade");
+        const logradouro = document.getElementById("logradouro");
+        const complemento = document.getElementById("complemento");
+
+        if (cep.length !== 8) {
+          alert("O CEP deve ter 8 dígitos.");
+          return;
+        }
+
+        const apicep = `https://viacep.com.br/ws/${cep}/json/`;
+
+        try {
+          const response = await fetch(apicep);
+          const data = await response.json();
+
+          if (data.erro) {
+            alert("CEP não encontrado.");
+            return;
+          }
+
+          uf.innerHTML = data.uf;
+          bairro.innerHTML = data.bairro;
+          localidade.innerHTML = data.localidade;
+          logradouro.innerHTML = data.logradouro;
+          complemento.innerHTML = data.complemento || "N/A";
+        } catch (error) {
+          alert("Erro ao buscar o CEP. Tente novamente.");
+          console.error("Erro:", error);
+        }
+      }
+
+      // Função usando AJAX
+      function pesquisacepAjax() {
+        const cep = document.querySelector(".cep").value;
+
+        if (cep.length !== 8) {
+          alert("O CEP deve ter 8 dígitos.");
+          return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        const apicep = `https://viacep.com.br/ws/${cep}/json/`;
+
+        xhr.open("GET", apicep, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            if (data.erro) {
+              alert("CEP não encontrado.");
+              return;
+            }
+            document.getElementById("uf").innerHTML = data.uf;
+            document.getElementById("bairro").innerHTML = data.bairro;
+            document.getElementById("localidade").innerHTML = data.localidade;
+            document.getElementById("logradouro").innerHTML = data.logradouro;
+            document.getElementById("complemento").innerHTML =
+              data.complemento || "N/A";
+          } else if (xhr.readyState === 4) {
+            alert("Erro ao buscar o CEP. Tente novamente.");
+          }
+        };
+        xhr.send();
       }
     </script>
   </body>

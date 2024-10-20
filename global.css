@@ -38,18 +38,35 @@ input {
     width: 110%;
 }
 
-.btnfetch {
+.btnfetch,
+.btnasync,
+.btnajax {
     color: white;
-    background: linear-gradient(red, green);
+    background: linear-gradient(black, green);
     outline: none;
     border: none;
     width: 300px;
     height: 30px;
     border-radius: 30px;
     transition: .3s;
+    cursor: pointer;
 }
 
-.btnfetch:hover {
+
+.btnajax {
+    background: linear-gradient(black, red);
+
+}
+
+.btnasync {
+    background: linear-gradient(black, purple);
+
+}
+
+.btnfetch:hover,
+.btnasync:hover,
+.btnajax:hover {
     transform: scale(1.2);
-    background: linear-gradient(green, red);
+    background: linear-gradient(black, yellow);
+
 }
